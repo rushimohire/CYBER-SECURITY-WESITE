@@ -1,0 +1,78 @@
+body {
+  margin: 0; padding: 0;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: #fff;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #111827;
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+nav .logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: #38bdf8;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 15px;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li a {
+  color: #0ff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav ul li a:hover,
+nav ul li a.logout {
+  color: #ef4444;
+  text-shadow: 0 0 5px #ef4444;
+}
+
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+}
+
+.hero h1 { font-size: 36px; color: #38bdf8; }
+.hero p { font-size: 18px; margin: 10px 0 20px; }
+.hero img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #0ff;
+}
+
+.info-section {
+  padding: 50px 20px;
+  border-bottom: 1px solid #2563eb;
+}
+
+.info-section h2 { color: #38bdf8; margin-bottom: 15px; }
+.info-section ul { list-style: disc; margin-left: 20px; }
+.info-section img {
+  width: 100%;
+  max-width: 500px;
+  margin-top: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #0ff;
+}
+
+/* Smooth scrolling for nav links */
+html {
+  scroll-behavior: smooth;
+}
