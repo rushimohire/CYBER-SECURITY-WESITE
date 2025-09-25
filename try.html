@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Password Generator</title>
+<style>
+  body {
+    margin:0;
+    font-family:Arial, sans-serif;
+    background: linear-gradient(135deg,#0f172a,#1e293b);
+    color:#fff;
+  }
+  /* Navbar */
+  .navbar {background:rgba(0,0,0,0.8); padding:15px; text-align:center;}
+  .navbar ul {list-style:none; margin:0; padding:0;}
+  .navbar li {display:inline-block; margin:0 15px;}
+  .navbar a {color:#0ff; text-decoration:none; font-weight:bold;}
+  .navbar a:hover {color:#ff0;}
+
+  .content { padding:30px; text-align:center;}
+  h2 {color:#38bdf8; margin-bottom:20px;}
+
+  .card {
+    display:inline-block; width:520px;
+    background:rgba(0,0,0,0.65);
+    padding:20px; border-radius:10px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.6);
+    text-align:left;
+  }
+  .card label {display:block; margin:10px 0 6px; font-weight:600; color:#bfefff;}
+  .card input[type="number"], .card select, .card input[readonly] {
+    width:100%; padding:10px; border-radius:6px; border:1px solid rgba(255,255,255,0.12);
+    background:rgba(255,255,255,0.03); color:#fff;
+  }
+  .options {display:flex; flex-wrap:wrap; gap:10px; margin:12px 0;}
+  .options label {font-weight:500; color:#cfefff;}
+  .btn {
+    background:#00bcd4; color:#001; padding:10px 14px; border:none; border-radius:6px;
+    cursor:pointer; font-weight:700; margin-top:10px;
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%{box-shadow:0 0 5px #00bcd4;}
+    50%{box-shadow:0 0 15px #38bdf8;}
+    100%{box-shadow:0 0 5px #00bcd4;}
+  }
+  .small {padding:8px 10px; margin-left:8px; border-radius:6px; cursor:pointer; background:#2b2b2b; color:#fff; border:1px solid rgba(255,255,255,0.08);}
+  .result-row {display:flex; gap:8px; margin-top:12px; align-items:center; position:relative;}
+  .result-row input {flex:1;}
+  .toggle-eye {
+    position:absolute; right:70px; cursor:pointer; color:#0ff;
+    user-select:none;
+  }
+  .strength-bar-container { background:#333; height:8px; border-radius:5px; margin-top:10px;}
+  .strength-bar { height:100%; width:0%; border-radius:5px; transition:width 0.3s;}
+  .strength-weak {background:#f87171;} .strength-med {background:#fbbf24;}
+  .strength-strong {background:#4ade80;} .strength-vstrong {background:#22d3ee;}
+  .meta {margin-top:8px; display:flex; justify-content:space-between; font-weight:600;}
+  #history {margin-top:20px;}
+  #history li {font-family:monospace; font-size:13px; color:#9ef; margin:3px 0;}
+
+  .toast {
+    position:fixed; bottom:20px; right:-300px;
+    background:#38bdf8; color:#111; padding:10px 15px; border-radius:8px;
+    font-weight:bold; transition:all 0.6s ease;
+  }
+  .toast.show { right:20px;}
+</style>
+</head>
+<body>
+  <nav class="navbar">
+    <ul>
+      <li><a href="home.html">Home</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li><a class="active" href="password.html">Password Tool</a></li>
+      <li><a href="threat.html">Threat Detection</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="index.html">Logout</a></li>
+    </ul>
+  </nav>
+
+  <main class="content">
+    <h2>Password Generator</h2>
+
+    <div class="card">
+      <label for="length">Password length</label>
+      <input id="length" type="number" min="4" max="128" value="12">
+
+      <label for="preset">Or choose a preset</label>
+      <select id="preset" onchange="applyPreset(this.value)">
+        <option value="">-- Select preset (optional) --</option>
+        <option value="pin">PIN (numbers only)</option>
+        <option value="alpha">Alphabetic</option>
+        <option value="alnum">Alphanumeric</option>
+        <option value="strong">Strong</option>
+        <option value="passphrase">Passphrase (words)</option>
+      </select>
+
+      <div class="options">
+        <label><input id="opt-upper" type="checkbox" checked> UPPERCASE</label>
+        <label><input id="opt-lower" type="checkbox" checked> lowercase</label>
+        <label><input id="opt-digits" type="checkbox" checked> digits</label>
+        <label><input id="opt-symbols" type="checkbox" checked> symbols</label>
+      </div>
+
+      <button class="btn" onclick="generatePassword()">Generate Password</button>
+
+      <div class="result-row">
+        <input id="generated" readonly placeholder="Generated password...">
+        <span class="toggle-eye" onclick="toggleVisibility()">👁️</span>
+        <button class="small" onclick="copyPassword()">Copy</button>
+      </div>
+
+      <div class="strength-bar-container">
+        <div id="strengthBar" class="strength-bar"></div>
+      </div>
+
+      <div class="meta">
+        <span id="strength">Strength: —</span>
+        <span id="entropy">Entropy: —</span>
+      </div>
+    </div>
+    <ul id="history"></ul>
+  </main>
+
+  <div id="toast" class="toast">Copied to clipboard!</div>
+
+<script>
+// ===== PRESET FUNCTIONALITY (same as earlier) =====
+const WORDS = ["alpha","bravo","charlie","delta","echo","foxtrot","golf","hotel","india","juliet","kilo","lima","mango","nova","omega","panda","quartz","radar","sigma","tango"];
+
+function applyPreset(preset) {
+  const lenEl=document.getElementById('length');
+  const u=document.getElementById('opt-upper');
+  const l=document.getElementById('opt-lower');
+  const d=document.getElementById('opt-digits');
+  const s=document.getElementById('opt-symbols');
+  switch(preset){
+    case 'pin': lenEl.value=6; u.checked=false; l.checked=false; d.checked=true; s.checked=false; break;
+    case 'alpha': lenEl.value=12; u.checked=true; l.checked=true; d.checked=false; s.checked=false; break;
+    case 'alnum': lenEl.value=12; u.checked=true; l.checked=true; d.checked=true; s.checked=false; break;
+    case 'strong': lenEl.value=16; u.checked=true; l.checked=true; d.checked=true; s.checked=true; break;
+    case 'passphrase': lenEl.value=4; u.checked=false; l.checked=false; d.checked=false; s.checked=false; break;
+  }
+}
+
+const UPPER="ABCDEFGHJKLMNPQRSTUVWXYZ";
+const LOWER="abcdefghijkmnpqrstuvwxyz";
+const DIGITS="23456789";
+const SYMBOLS="!@#$%^&*()-_=+[]{}<>?/";
+
+function randomChar(str){return str.charAt(Math.floor(Math.random()*str.length));}
+function shuffleArray(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+
+function generatePassword(){
+  const length=parseInt(document.getElementById('length').value)||12;
+  const u=document.getElementById('opt-upper').checked;
+  const l=document.getElementById('opt-lower').checked;
+  const d=document.getElementById('opt-digits').checked;
+  const s=document.getElementById('opt-symbols').checked;
+  const preset=document.getElementById('preset').value;
+  let pwd="";
+  if(preset==="passphrase"){
+    const words=[];
+    for(let i=0;i<Math.max(1,length);i++){words.push(WORDS[Math.floor(Math.random()*WORDS.length)]);}
+    pwd=words.join('-');
+    return showResult(pwd);
+  }
+  let pool=""; if(u) pool+=UPPER; if(l) pool+=LOWER; if(d) pool+=DIGITS; if(s) pool+=SYMBOLS;
+  if(!pool){alert("Choose at least one type."); return;}
+  let must=[]; if(u) must.push(randomChar(UPPER)); if(l) must.push(randomChar(LOWER)); if(d) must.push(randomChar(DIGITS)); if(s) must.push(randomChar(SYMBOLS));
+  let pwdArr=[...must];
+  for(let i=pwdArr.length;i<length;i++){pwdArr.push(randomChar(pool));}
+  pwdArr=shuffleArray(pwdArr);
+  pwd=pwdArr.join('');
+  showResult(pwd);
+}
+
+function showResult(pwd){
+  const out=document.getElementById('generated');
+  out.type="text";
+  out.value="";
+  // animate typing
+  let i=0; 
+  const interval=setInterval(()=>{
+    out.value+=pwd[i++];
+    if(i>=pwd.length) clearInterval(interval);
+  },50);
+
+  const hasUpper=/[A-Z]/.test(pwd), hasLower=/[a-z]/.test(pwd), hasDigit=/[0-9]/.test(pwd), hasSymbol=/[^A-Za-z0-9]/.test(pwd);
+  let poolSize=0;
+  if(hasUpper) poolSize+=UPPER.length;
+  if(hasLower) poolSize+=LOWER.length;
+  if(hasDigit) poolSize+=DIGITS.length;
+  if(hasSymbol) poolSize+=SYMBOLS.length;
+  let entropy=0;
+  if(pwd.includes('-')){const wc=pwd.split('-').length; entropy=Math.log2(Math.pow(WORDS.length,wc));}
+  else {entropy=pwd.length*Math.log2(poolSize||1);}
+  let text="Weak", cls="strength-weak";
+  if(entropy>=80){text="Very strong"; cls="strength-vstrong";}
+  else if(entropy>=60){text="Strong"; cls="strength-strong";}
+  else if(entropy>=40){text="Medium"; cls="strength-med";}
+  const strengthBar=document.getElementById('strengthBar');
+  strengthBar.className="strength-bar "+cls;
+  strengthBar.style.width=Math.min(100,entropy)+"%";
+  document.getElementById('strength').innerText="Strength: "+text;
+  document.getElementById('entropy').innerText="Entropy: "+Math.round(entropy)+" bits";
+
+  // save to history
+  const history=document.getElementById('history');
+  const li=document.createElement('li'); li.textContent=pwd;
+  history.prepend(li); if(history.children.length>5) history.removeChild(history.lastChild);
+}
+
+function copyPassword(){
+  const out=document.getElementById('generated');
+  navigator.clipboard.writeText(out.value);
+  showToast("Password copied ✅");
+}
+
+function toggleVisibility(){
+  const out=document.getElementById('generated');
+  out.type=(out.type==="password")?"text":"password";
+}
+function showToast(msg){
+  const toast=document.getElementById('toast');
+  toast.textContent=msg; toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"),2000);
+}
+</script>
+</body>
+</html>

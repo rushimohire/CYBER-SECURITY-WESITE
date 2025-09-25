@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Security Login</title>
+  <link rel="stylesheet" href="css/login.css">
+  <script src="javascript/login.js" defer></script>
+</head>
+<body>
+  <div class="login-container">
+    <h2>🔐 Cyber Security Login</h2>
+    <form id="loginForm" onsubmit="return validateLogin()">
+      <!-- Username -->
+      <div class="input-group">
+        <input type="text" id="username" required>
+        <label>Username</label>
+      </div>
+
+      <!-- Password -->
+      <div class="input-group">
+        <input type="password" id="password" required>
+        <label>Password</label>
+      </div>
+
+      <!-- Captcha -->
+      <div class="captcha-container">
+        <span id="captcha"></span>
+        <button type="button" onclick="generateCaptcha()">↻</button>
+      </div>
+      <input type="text" id="captchaInput" placeholder="Enter Captcha" required>
+
+      <!-- Login Button -->
+      <button type="submit" class="btn">Login</button>
+      <p id="error-msg"></p>
+    </form>
+  </div>
+</body>
+</html>

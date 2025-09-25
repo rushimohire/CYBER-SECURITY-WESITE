@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #fff;
+      overflow: hidden; /* Prevent scrollbars from animation */
+    }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(17, 24, 39, 0.9);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      border-bottom: 2px solid transparent;
+      background-clip: padding-box;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(12px);
+    }
+    .logo {
+      font-size: 22px;
+      font-weight: bold;
+      color: #38bdf8;
+      letter-spacing: 1px;
+    }
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar ul li a {
+      color: #f9fafb;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: bold;
+      transition: 0.3s;
+      position: relative;
+    }
+    .navbar ul li a:hover {
+      color: #38bdf8;
+      text-shadow: 0 0 10px #38bdf8;
+    }
+    .navbar ul li a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      left: 0;
+      bottom: -5px;
+      background: #38bdf8;
+      transition: 0.3s;
+    }
+    .navbar ul li a:hover::after {
+      width: 100%;
+    }
+
+    /* Profile Content */
+    .container {
+      position: relative;
+      max-width: 600px;
+      margin: 100px auto;
+      padding: 40px;
+      border-radius: 15px;
+      text-align: center;
+      backdrop-filter: blur(15px);
+      background: rgba(255, 255, 255, 0.05);
+      border: 3px solid;
+      border-image: linear-gradient(45deg, #38bdf8, #0ea5e9, #2563eb) 1;
+      animation: floatUp 1.2s ease-out forwards;
+    }
+    img {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 5px solid #38bdf8;
+      margin-bottom: 20px;
+      animation: pulse 4s infinite alternate;
+    }
+    h2 {
+      margin-bottom: 10px;
+      color: #38bdf8;
+      font-size: 26px;
+      animation: fadeIn 1.4s ease-in;
+    }
+    p {
+      margin: 8px 0;
+      font-size: 16px;
+      opacity: 0;
+      animation: fadeIn 1.5s ease-in forwards;
+    }
+    /* Delay role typing effect */
+    p.role {
+      border-right: 3px solid #38bdf8;
+      width: fit-content;
+      margin: 10px auto;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: typing 3s steps(25, end), blink 0.75s step-end infinite;
+    }
+
+    /* Animations */
+    @keyframes pulse {
+      0% { box-shadow: 0 0 25px #38bdf8; }
+      100% { box-shadow: 0 0 60px #38bdf8, 0 0 120px #0ea5e9; }
+    }
+    @keyframes floatUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    /* Background Canvas */
+    #bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Animation -->
+  <canvas id="bg"></canvas>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">🔐 CyberSecurity</div>
+    <ul>
+      <li><a href="profile.html">Profile</a></li>
+      <li><a href="passgenrator.html">Password Generator</a></li>
+      <li><a href="threat.html">Threat Detection</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Profile Card -->
+  <div class="container">
+    <img src="profilepicture.png" alt="Profile Photo">
+    <h2>Rushikesh Mohire</h2>
+    <p><strong>Email:</strong> rushi@example.com</p>
+    <p class="role"><strong>Role:</strong> Student (MCA)</p>
+    <p><strong>Joined:</strong> Sept 2025</p>
+  </div>
+
+  <script>
+    // Cyber Particle Background
+    const canvas = document.getElementById('bg');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+    for (let i = 0; i < 100; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 2 + 1,
+        dx: (Math.random() - 0.5) * 1.2,
+        dy: (Math.random() - 0.5) * 1.2,
+        alpha: Math.random()
+      });
+    }
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(56,189,248,${p.alpha})`;
+        ctx.fill();
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+      });
+      requestAnimationFrame(drawParticles);
+    }
+    drawParticles();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>

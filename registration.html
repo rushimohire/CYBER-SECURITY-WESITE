@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Security Registration</title>
+  <link rel="stylesheet" href="css/register.css">
+  <script src="javascript/register.js" defer></script>
+</head>
+<style>
+    body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: #fff;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-container {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.6);
+  width: 350px;
+  text-align: center;
+  backdrop-filter: blur(12px);
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #38bdf8;
+  text-shadow: 0 0 15px #2563eb;
+}
+
+.input-group {
+  position: relative;
+  margin: 20px 0;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-bottom: 2px solid #38bdf8;
+  background: transparent;
+  color: #fff;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.input-group label {
+  position: absolute;
+  left: 0;
+  pointer-events: none;
+  top: 10px;
+  transition: 0.3s;
+  color: #aaa;
+}
+
+.input-group input:focus,
+.input-group input:valid {
+  border-color: #2563eb;
+}
+
+.input-group input:focus ~ label,
+.input-group input:valid ~ label {
+  top: -15px;
+  font-size: 12px;
+  color: #38bdf8;
+}
+
+.captcha-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px 0;
+  background: #111827;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.captcha-container span {
+  font-weight: bold;
+  font-size: 18px;
+  letter-spacing: 3px;
+  color: #38bdf8;
+}
+
+.captcha-container button {
+  background: #38bdf8;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  border: none;
+  background: linear-gradient(90deg,#2563eb,#1e40af);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background: linear-gradient(90deg,#1e40af,#2563eb);
+  box-shadow: 0 0 20px #38bdf8;
+}
+
+#strengthMessage, #matchMessage {
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+#error-msg {
+  margin-top: 15px;
+  color: #f87171;
+  font-weight: bold;
+}
+</style>
+<body>
+  <div class="register-container">
+    <h2>📝 Cyber Security Registration</h2>
+    <form id="registerForm" onsubmit="return validateRegistration()">
+      
+      <!-- Full Name -->
+      <div class="input-group">
+        <input type="text" id="fullname" required>
+        <label>Full Name</label>
+      </div>
+
+      <!-- Email -->
+      <div class="input-group">
+        <input type="email" id="email" required>
+        <label>Email</label>
+      </div>
+
+      <!-- Username -->
+      <div class="input-group">
+        <input type="text" id="username" required>
+        <label>Username</label>
+      </div>
+
+      <!-- Password -->
+      <div class="input-group">
+        <input type="password" id="password" required onkeyup="checkStrength()">
+        <label>Password</label>
+      </div>
+      <div id="strengthMessage"></div>
+
+      <!-- Confirm Password -->
+      <div class="input-group">
+        <input type="password" id="confirmPassword" required onkeyup="checkMatch()">
+        <label>Confirm Password</label>
+      </div>
+      <div id="matchMessage"></div>
+
+      <!-- Captcha -->
+      <div class="captcha-container">
+        <span id="captcha"></span>
+        <button type="button" onclick="generateCaptcha()">↻</button>
+      </div>
+      <input type="text" id="captchaInput" placeholder="Enter Captcha" required>
+
+      <!-- Register Button -->
+      <button type="submit" class="btn">Register</button>
+      <p id="error-msg"></p>
+    </form>
+  </div>
+  <script>
+    // Generate Captcha
+function generateCaptcha(){
+  let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let captcha = "";
+  for(let i=0;i<6;i++){
+    captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  document.getElementById("captcha").innerText = captcha;
+}
+generateCaptcha();
+
+// Check Password Strength
+function checkStrength(){
+  let pass = document.getElementById("password").value;
+  let strengthBadge = document.getElementById("strengthMessage");
+
+  if(pass.length < 6){
+    strengthBadge.textContent = "Weak ❌";
+    strengthBadge.style.color = "#f87171";
+  }
+  else if(pass.match(/[A-Z]/) && pass.match(/[0-9]/) && pass.length >= 8){
+    strengthBadge.textContent = "Strong ✅";
+    strengthBadge.style.color = "#4ade80";
+  }
+  else{
+    strengthBadge.textContent = "Medium ⚠️";
+    strengthBadge.style.color = "#fbbf24";
+  }
+}
+
+// Confirm Password Match
+function checkMatch(){
+  let pass = document.getElementById("password").value;
+  let confirm = document.getElementById("confirmPassword").value;
+  let matchMsg = document.getElementById("matchMessage");
+  
+  if(confirm === pass && pass !== ""){
+    matchMsg.textContent = "Passwords Match ✅";
+    matchMsg.style.color = "#4ade80";
+  } else {
+    matchMsg.textContent = "Passwords Do Not Match ❌";
+    matchMsg.style.color = "#f87171";
+  }
+}
+
+// Validate Registration
+function validateRegistration(){
+  let fullname = document.getElementById("fullname").value;
+  let email = document.getElementById("email").value;
+  let user = document.getElementById("username").value;
+  let pass = document.getElementById("password").value;
+  let confirm = document.getElementById("confirmPassword").value;
+  let captcha = document.getElementById("captcha").innerText;
+  let captchaInput = document.getElementById("captchaInput").value;
+  let errorMsg = document.getElementById("error-msg");
+
+  if(confirm !== pass){
+    errorMsg.textContent = "❌ Passwords do not match!";
+    return false;
+  }
+  if(captchaInput !== captcha){
+    errorMsg.textContent = "❌ Captcha incorrect!";
+    generateCaptcha();
+    return false;
+  }
+
+  alert("🎉 Welcome " + fullname + "! Registration successful.");
+  window.location.href = "login.html"; // Redirect to Login
+  return false;
+}
+  </script>
+</body>
+</html>

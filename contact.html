@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #fff;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: #111827;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      border-bottom: 2px solid #2563eb;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+      color: #38bdf8;
+    }
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar ul li a {
+      color: #f9fafb;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .navbar ul li a:hover {
+      color: #38bdf8;
+      text-shadow: 0 0 10px #38bdf8;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 50px 20px;
+      background: rgba(17,24,39,0.85);
+      border-bottom: 2px solid #2563eb;
+    }
+    .hero h1 {
+      font-size: 36px;
+      color: #38bdf8;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      opacity: 0.8;
+    }
+
+    /* Contact Section */
+    .container {
+      max-width: 1000px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+      margin: 50px auto;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.5);
+    }
+
+    /* Left Info Box */
+    .info {
+      padding: 20px;
+    }
+    .info h2 {
+      color: #38bdf8;
+      margin-bottom: 20px;
+    }
+    .info-item {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .info-item span {
+      font-size: 20px;
+      color: #38bdf8;
+    }
+
+    /* Form */
+    form label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    form input, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 6px;
+      background: #f9fafb;
+      color: #111827;
+      transition: 0.3s;
+    }
+    form input:focus, form textarea:focus {
+      outline: 2px solid #38bdf8;
+      box-shadow: 0 0 10px #38bdf8;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #2563eb, #1e40af);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #1e40af, #2563eb);
+      box-shadow: 0 0 15px #38bdf8;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      border-top: 2px solid #2563eb;
+      background: #111827;
+      font-size: 14px;
+      margin-top: 50px;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">🔐 CyberSecurity</div>
+    <ul>
+      <li><a href="home.html">Home</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li><a href="passgenrator.html">Password Generator</a></li>
+      <li><a href="threat.html">Threat Detection</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>📩 Contact Us</h1>
+    <p>We’d love to hear from you. Reach out with your questions or suggestions.</p>
+  </section>
+
+  <!-- Contact Section -->
+  <div class="container">
+    <!-- Info Box -->
+    <div class="info">
+      <h2>Reach Us At</h2>
+      <div class="info-item"><span>📧</span> support@cyberportal.com</div>
+      <div class="info-item"><span>📞</span> +91 98765 43210</div>
+      <div class="info-item"><span>📍</span> Pune, India</div>
+    </div>
+
+    <!-- Form -->
+    <form onsubmit="return submitForm()">
+      <label for="name">Your Name</label>
+      <input type="text" id="name" placeholder="Enter your name" required>
+
+      <label for="email">Your Email</label>
+      <input type="email" id="email" placeholder="Enter your email" required>
+
+      <label for="message">Your Message</label>
+      <textarea id="message" rows="5" placeholder="Write your message..." required></textarea>
+
+      <button type="submit">Send Message</button>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 CyberSecurity Portal | Secure Your Future with Us 🔐</p>
+  </footer>
+
+  <script>
+    function submitForm() {
+      alert("✅ Thank you! Your message has been sent successfully.");
+      return false; // prevent real submission for demo
+    }
+  </script>
+</body>
+</html>
