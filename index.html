@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Portal | Main Page</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .hero {
+      max-width: 600px;
+    }
+    .hero h1 {
+      font-size: 45px;
+      color: #38bdf8;
+      text-shadow: 0 0 20px #2563eb;
+      margin-bottom: 15px;
+    }
+    .hero p {
+      font-size: 18px;
+      opacity: 0.85;
+      margin-bottom: 30px;
+    }
+    .btn-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .btn {
+      padding: 15px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+      background: linear-gradient(90deg, #2563eb, #1e40af);
+      transition: 0.3s;
+      text-decoration: none; /* so it looks like a button, not an underline link */
+      display: inline-block;
+    }
+    .btn:hover {
+      background: linear-gradient(90deg, #1e40af, #2563eb);
+      box-shadow: 0 0 15px #38bdf8;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1>🔐 Cyber Security Portal</h1>
+    <p>Secure your future — Login or Register to explore password tools, threat detection, and more.</p>
+    <div class="btn-container">
+      <a href="login.html" class="btn">Login</a>
+      <a href="registration.html" class="btn">Register</a>
+    </div>
+  </div>
+</body>
+</html>
